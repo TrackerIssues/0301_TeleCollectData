@@ -1,0 +1,76 @@
+# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
+
+name: Python application
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  schedule:
+    # - cron: '0 */1 * * *' 
+    - cron: '*/30 * * * *' 
+    # - cron: '0 0,4,9,12 * * *' 
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+        
+    - name: Set up Python 3.x
+      # uses: actions/setup-python@v1
+      uses: actions/setup-python@v3
+      with:
+          python-version: '3.x'
+          architecture: 'x64'
+          
+    - name: Download chromedriver
+      run: |
+        wget -q -O tmp.zip https://chromedriver.storage.googleapis.com/81.0.4044.69/chromedriver_linux64.zip
+        unzip tmp.zip && rm tmp.zip
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install python-telegram-bot
+        pip install asyncio
+        pip install pytz
+        pip install requests
+        pip install beautifulsoup4
+        pip install pandas
+        pip install selenium
+        # apt-get update
+        # apt install chromium-chromedriver
+        # cp /usr/lib/chromium-browser/chromedriver /usr/bin
+        # if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+    
+    - name: Test with pytest
+      env: 
+        sId: ${{secrets.SID}}
+        sToken: ${{secrets.STOKEN}}
+      run: |
+        # python SmsTelegramKstTxt.py
+        # python 003_TeleKstTxtChromeSignal.py
+        python App.py
+        python SendTeleMsg.py "$sId" "$sToken"
+        
+        
+    - name: Commits and Run
+      run: |
+        git config --local user.email "trackin9issues@gmail.com"
+        git config --local user.name "Tracker" 
+        
+        git add dfMsg.csv
+        git add dfKeyWord.csv
+        
+        git commit -m "Auto - Update data!" 
+        git push
+        # git push -u origin main
