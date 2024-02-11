@@ -18,13 +18,6 @@ with open("dfMsg.csv", "r") as f :
     for line in lstLines :
         sExtMsg += line
 
-
-
-# sToken =  "6777584208:AAHJAks6oiAODDw70OymTAhkntLMHinc6BU"
-# sId = "6781069006"
-
-
-
 sMsg = dtKorea.strftime('%Y-%m-%d %H:%M') + """
 
 Ta~Da~ External Argv
