@@ -13,9 +13,6 @@ on:
     - cron: '*/30 * * * *' 
     # - cron: '0 0,4,9,12 * * *' 
 
-permissions:
-  contents: read
-
 jobs:
   build:
 
