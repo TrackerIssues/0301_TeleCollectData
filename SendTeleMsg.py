@@ -10,8 +10,6 @@ KST = timezone('Asia/Seoul')
 
 dtKorea = NowDateTime(KST)
 
-
-
 sExtMsg = ""
 with open("dfMsg.csv", "r") as f :
     lstLines = f.readlines()
