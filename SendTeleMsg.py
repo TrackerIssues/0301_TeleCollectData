@@ -3,6 +3,7 @@ import telegram
 import datetime
 from pytz import timezone, utc
 import sys
+import re
 
 from SetTimeZone import NowDateTime
 
@@ -10,10 +11,16 @@ KST = timezone('Asia/Seoul')
 
 dtKorea = NowDateTime(KST)
 
+bContainKeyword = False
+sKey = '속보'
+reCheck = re.compile(sKey)
+
 sExtMsg = ""
 with open("dfMsg.csv", "r") as f :
     lstLines = f.readlines()
     for line in lstLines :
+        if reCheck.search(line) :
+            bContainKeyword = True
         sExtMsg += line
 
 sMsg = dtKorea.strftime('%Y-%m-%d %H:%M') + """
@@ -35,4 +42,5 @@ if __name__ == '__main__' :
     sToken = sys.argv[2]
     # print(sId)
     # print(sToken)
-    asyncio.run( main())
+    if bContainKeyword :
+        asyncio.run( main())
